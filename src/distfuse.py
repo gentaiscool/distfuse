@@ -63,12 +63,12 @@ class DistFuse():
             Args:
                 model_checkpoints (List[str]): a list of model checkpoints and types
                 weights (List[float]): a list of weights
-                dist_measure (str): the distance measure
+                dist_measure (str): the distance measure (only accept euclidean, cosine, manhattan, by default: euclidean)
         """
         self.model_checkpoints = model_checkpoints
         self.models = []
 
-        if dist_measure == "euclid":
+        if dist_measure == "euclidean":
             self.dist_measure = euclidean_distances
         elif dist_measure == "cosine":
             self.dist_measure = cosine_similarity
