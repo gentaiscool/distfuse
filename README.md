@@ -33,7 +33,7 @@ If you use any source codes included in this toolkit in your work, please cite t
 ```
 
 ## Usage
-We support `hf` (Hugging Face models), and APIs, such as `cohere`, and `openai`. 
+We support `hf` (Hugging Face models), and APIs, such as `cohere`, and `openai`. For `dist_measure`, we support `cosine`, `euclidean`, and `manhattan`.
 
 DistFuse with 2 models.
 ```python
