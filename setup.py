@@ -6,12 +6,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="distfuse",
-    version="0.1.0",
+    version="0.1.1",
     author="Genta Indra Winata",
     author_email="gentaindrawinata@gmail.com",
     description="Compute DistFuse similarity scores from embedding models and APIs",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    license="Apache 2.0 License",
     url="https://github.com/gentaiscool/distfuse",
     project_urls={
         "Bug Tracker": "https://github.com/gentaiscool/distfuse/issues",
