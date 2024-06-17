@@ -50,8 +50,8 @@ class DistFuse():
         e.g.,
             from distfuse import DistFuse
 
-            model_checkpoints = [("sentence-transformers/LaBSE", "hf"), ("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf")]
-            weights = [1, 1]
+            model_checkpoints = [("sentence-transformers/LaBSE", "hf"), ("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"), ("text-embedding-3-large", "openai")]
+            weights = [1, 1, 1]
             dist_measure = "cosine"
             model = DistFuse(model_checkpoints, weights, dist_measure)
             
