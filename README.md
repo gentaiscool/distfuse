@@ -1,12 +1,13 @@
 # DistFuse
 
-DistFuse is a library to calculate similarity scores between two collections of text sequences encoded using transformer models. This library allows combining more than one models, including APIs,  
+DistFuse is a library to calculate similarity scores between two collections of text sequences encoded using transformer models. This library allows combining more than one models, including APIs from Cohere and OpenAI.
 
 ## Table of Contents
 
 - [Install](#install)
 - [Reference](#reference)
 - [Usage](#usage)
+- [How to Contribute?](#-how-to-contribute)
 
 ## Install
 ```
@@ -59,3 +60,10 @@ model = DistFuse(model_checkpoints, weights, dist_measure, openai_token="", cohe
 scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
 print(scores)
 ```
+
+## 🚀 How to Contribute?
+Feel free to create [an issue](https://github.com/gentaiscool/distfuse/issues/) if you have any questions. And, create [a PR](https://github.com/gentaiscool/distfuse/pulls) for fixing bugs or adding improvements. 
+
+If you are interested to create an extension of this work, feel free to reach out to [us](mailto:gentaindrawinata@gmail.com)!
+
+Support our open source effort ⭐
