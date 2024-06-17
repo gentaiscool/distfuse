@@ -33,7 +33,7 @@ If you use any source codes included in this toolkit in your work, please cite t
 ```
 
 ## Usage
-We support `hf` (Hugging Face models), and APIs, such as `cohere`, and `openai`. For `dist_measure`, we support `cosine`, `euclidean`, and `manhattan`.
+We support `hf` (Hugging Face models), and APIs, such as `cohere`, and `openai`. For `dist_measure`, we support `cosine`, `euclidean`, and `manhattan`. If you are planning to use API models, please pass the appropriate token to `openai_token` or `cohere_token`.
 
 DistFuse with 2 models.
 ```python
@@ -42,7 +42,7 @@ from distfuse import DistFuse
 model_checkpoints = [["sentence-transformers/LaBSE", "hf"], ["sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"]]
 weights = [1, 1]
 dist_measure = "cosine" # cosine, euclidean, manhattan
-model = DistFuse(model_checkpoints, weights, dist_measure)
+model = DistFuse(model_checkpoints, weights, dist_measure, openai_token="", cohere_token="")
 
 scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
 print(scores)
