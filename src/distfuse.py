@@ -56,7 +56,7 @@ class DistFuse():
             model = DistFuse(model_checkpoints, weights, dist_measure)
             
             scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
-            print(scores.shape)
+            print(scores)
     """
     def __init__(self, model_checkpoints:List[List[str]], weights:List[float]=None, dist_measure:str="euclid"):
         """
