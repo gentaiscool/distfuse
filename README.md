@@ -4,9 +4,9 @@ DistFuse is a library to calculate similarity scores between two collections of 
 
 ## Table of Contents
 
-- [Install](#-install)
-- [Reference](#-reference)
-- [Usage](#-usage)
+- [Install](#install)
+- [Reference](#reference)
+- [Usage](#usage)
 
 ## Install
 ```
