@@ -33,7 +33,7 @@ class EmbeddingModel():
         response = self.model.embed(texts=texts, model=self.model_checkpoint, input_type="search_query")
         return response.embeddings
 
-    def forward(self, texts):
+    def encode(self, texts):
         if self.type == "openai":
             embeddings = self.get_openai_embedding(texts)
         elif self.type == "cohere":
@@ -55,7 +55,7 @@ class DistFuse():
             dist_measure = "cosine"
             model = DistFuse(model_checkpoints, weights, dist_measure)
             
-            scores = model(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
+            scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
             print(scores.shape)
     """
     def __init__(self, model_checkpoints:List[List[str]], weights:List[float]=None, dist_measure:str="euclid"):

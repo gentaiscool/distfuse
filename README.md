@@ -43,7 +43,7 @@ weights = [1, 1]
 dist_measure = "cosine"
 model = DistFuse(model_checkpoints, weights, dist_measure)
 
-scores = model(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
+scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
 print(scores.shape)
 ```
 
@@ -56,6 +56,6 @@ weights = [1, 1, 1]
 dist_measure = "cosine"
 model = DistFuse(model_checkpoints, weights, dist_measure)
 
-scores = model(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
+scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
 print(scores.shape)
 ```
