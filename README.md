@@ -33,9 +33,9 @@ If you use any source codes included in this toolkit in your work, please cite t
 ```
 
 ## Usage
-We support `hf` (Hugging Face models), and APIs, such as `cohere`, and `openai`. For `dist_measure`, we support `cosine`, `euclidean`, and `manhattan`. If you are planning to use API models, please pass the appropriate token to `openai_token` or `cohere_token`.
+We support `hf` (Hugging Face models), and APIs, such as `cohere`, and `openai`. For `dist_measure`, we support `cosine`, `euclidean`, and `manhattan`. If you are planning to use API models, please pass the appropriate token to `openai_token` or `cohere_token`. To use more than one model, add the model information to `model_checkpoints` and the weight to `weights`. There is no limit to the number of models you can use.
 
-DistFuse with 2 models.
+e.g., DistFuse with 2 models.
 ```python
 from distfuse import DistFuse
 
@@ -48,7 +48,7 @@ scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I
 print(scores)
 ```
 
-DistFuse with 3 models.
+e.g., DistFuse with 3 models. 
 ```python
 from distfuse import DistFuse
 
