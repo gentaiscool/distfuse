@@ -1,5 +1,7 @@
 # DistFuse
 
+DistFuse is a library to calculate similarity scores between two collections of text sequences encoded using transformer models. This library allows combining more than one models, including APIs,  
+
 ## Install
 ```
 pip install distfuse
@@ -24,10 +26,11 @@ If you use any source codes included in this toolkit in your work, please cite t
 ```
 
 ## Usage
+We support `hf` (Hugging Face models), and APIs, such as `cohere`, and `openai`. 
 ```python
 from distfuse import DistFuse
 
-model_checkpoints = ["sentence-transformers/LaBSE", "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"]
+model_checkpoints = [("sentence-transformers/LaBSE", "hf"), ("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf")]
 weights = [1, 1]
 dist_measure = "cosine"
 model = DistFuse(model_checkpoints, weights, dist_measure)

@@ -2,6 +2,46 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances, manhattan_distances
 from typing import List, Any
 import numpy as np
+from openai import OpenAI
+import cohere
+
+class EmbeddingModel():
+    """
+        An embedding model class
+    """
+    def __init__(self, model_checkpoint:str, type:str="hf", token:str=""):
+        self.model_checkpoint = model_checkpoint
+        self.type = type
+
+        if type == "openai":
+            self.model = OpenAI(api_key=token)
+        elif type == "cohere":
+            self.model - cohere.Client(token)
+        elif type == "hf": # huggingface
+            self.model = SentenceTransformer(model_checkpoint)
+        else:
+            raise ValueError(f"We only support openai, cohere, and hf as model_checkpoint type.")
+    
+    def get_openai_embedding(self, texts):
+        data = self.model.embeddings.create(input = texts, model=self.model_checkpoint).data
+        embeddings = []
+        for obj in data:
+            embeddings.append(obj.embedding)
+        return embeddings
+
+    def get_cohere_embedding(self, texts):
+        response = self.model.embed(texts=texts, model=self.model_checkpoint, input_type="search_query")
+        return response.embeddings
+
+    def encode(self, texts):
+        if self.type == "openai":
+            embeddings = self.get_openai_embedding(texts)
+        elif self.type == "cohere":
+            embeddings = self.get_cohere_embedding(texts)
+        else:
+            embeddings = self.model.encode(texts)
+        return embeddings
+
 
 class DistFuse():
     """
@@ -10,7 +50,7 @@ class DistFuse():
         e.g.,
             from distfuse import DistFuse
 
-            model_checkpoints = ["sentence-transformers/LaBSE", "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"]
+            model_checkpoints = [("sentence-transformers/LaBSE", "hf"), ("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf")]
             weights = [1, 1]
             dist_measure = "cosine"
             model = DistFuse(model_checkpoints, weights, dist_measure)
@@ -18,10 +58,10 @@ class DistFuse():
             scores = model(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
             print(scores.shape)
     """
-    def __init__(self, model_checkpoints:List[str], weights:List[float]=None, dist_measure:str="euclid"):
+    def __init__(self, model_checkpoints:List[List[str]], weights:List[float]=None, dist_measure:str="euclid"):
         """
             Args:
-                model_checkpoints (List[str]): a list of model checkpoints
+                model_checkpoints (List[str]): a list of model checkpoints and types
                 weights (List[float]): a list of weights
                 dist_measure (str): the distance measure
         """
@@ -39,7 +79,7 @@ class DistFuse():
 
         for i in range(len(self.model_checkpoints)):
             model_checkpoint = self.model_checkpoints[i]
-            model = SentenceTransformer(model_checkpoint)
+            model = EmbeddingModel(model_checkpoint[0], type=model_checkpoint[1])
             self.models.append(model)
 
         if weights is not None:
