@@ -33,10 +33,25 @@ If you use any source codes included in this toolkit in your work, please cite t
 
 ## Usage
 We support `hf` (Hugging Face models), and APIs, such as `cohere`, and `openai`. 
+
+DistFuse with 2 models.
 ```python
 from distfuse import DistFuse
 
-model_checkpoints = [("sentence-transformers/LaBSE", "hf"), ("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"), ("text-embedding-3-large", "openai")]
+model_checkpoints = [["sentence-transformers/LaBSE", "hf"], ["sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"]]
+weights = [1, 1]
+dist_measure = "cosine"
+model = DistFuse(model_checkpoints, weights, dist_measure)
+
+scores = model(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
+print(scores.shape)
+```
+
+DistFuse with 3 models.
+```python
+from distfuse import DistFuse
+
+model_checkpoints = [["sentence-transformers/LaBSE", "hf"], ["sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"], ["text-embedding-3-large", "openai"]]
 weights = [1, 1, 1]
 dist_measure = "cosine"
 model = DistFuse(model_checkpoints, weights, dist_measure)
