@@ -16,7 +16,7 @@ class EmbeddingModel():
         if type == "openai":
             self.model = OpenAI(api_key=openai_token)
         elif type == "cohere":
-            self.model - cohere.Client(cohere_token)
+            self.model = cohere.Client(cohere_token)
         elif type == "hf": # huggingface
             self.model = SentenceTransformer(model_checkpoint)
         else:
