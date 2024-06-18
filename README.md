@@ -1,6 +1,6 @@
 # DistFuse
 
-DistFuse is a library to calculate similarity scores between two collections of text sequences encoded using transformer models. This library allows combining more than one models, including APIs from Cohere and OpenAI.
+DistFuse is a library to calculate similarity scores between two collections of text sequences encoded using transformer models. This library allows combining more than one models, including APIs from Cohere and OpenAI. This is the same implementation of DistFuse from the [MINERS paper](https://arxiv.org/pdf/2406.07424).
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@ pip install distfuse
 ```
 
 ## Reference
-If you use any source codes included in this toolkit in your work, please cite the following papers [1](https://arxiv.org/pdf/2406.07424) [2](https://aclanthology.org/2023.ijcnlp-short.11.pdf).
+If you use any source codes included in this toolkit in your work, please cite the following papers [[1]](https://arxiv.org/pdf/2406.07424) [[2]](https://aclanthology.org/2023.ijcnlp-short.11.pdf).
 ```
 @article{winata2024miners,
   title={MINERS: Multilingual Language Models as Semantic Retrievers},
