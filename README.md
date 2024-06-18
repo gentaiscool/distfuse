@@ -1,6 +1,6 @@
 # DistFuse
 
-DistFuse is a library to calculate similarity scores between two collections of text sequences encoded using transformer models. This library allows combining multiple models, including Hugging Face encoder models and embed APIs from Cohere and OpenAI. This is the same implementation of DistFuse from the [MINERS paper](https://arxiv.org/pdf/2406.07424).
+DistFuse is a library to calculate similarity scores between two collections of text sequences encoded using transformer models. This library allows combining multiple models, including Hugging Face encoder models and embed APIs from Cohere and OpenAI. This is the same implementation of DistFuse from the [MINERS paper](https://arxiv.org/pdf/2406.07424). This library is useful for bitext mining, dense retrieval, retrieval-based classification, and retrieval-augmented generation (RAG).
 
 ## Table of Contents
 
