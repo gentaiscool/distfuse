@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="distfuse",
-    version="0.1.1",
+    version="0.1.2",
     author="Genta Indra Winata",
     author_email="gentaindrawinata@gmail.com",
     description="Compute DistFuse similarity scores from embedding models and APIs",
