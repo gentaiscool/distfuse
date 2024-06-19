@@ -9,7 +9,7 @@ class EmbeddingModel():
     """
         An embedding model class
     """
-    def __init__(self, model_checkpoint:str, type:str="hf", openai_token:str="", cohere_token:str=""):
+    def __init__(self, model_checkpoint:str, type:str="hf", openai_token:str="", cohere_token:str="", device:str=""):
         self.model_checkpoint = model_checkpoint
         self.type = type
 
@@ -18,7 +18,7 @@ class EmbeddingModel():
         elif type == "cohere":
             self.model = cohere.Client(cohere_token)
         elif type == "hf": # huggingface
-            self.model = SentenceTransformer(model_checkpoint)
+            self.model = SentenceTransformer(model_checkpoint).to(device)
         else:
             raise ValueError(f"We only support openai, cohere, and hf as model_checkpoint type.")
     
@@ -58,7 +58,7 @@ class DistFuse():
             scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
             print(scores)
     """
-    def __init__(self, model_checkpoints:List[List[str]], weights:List[float]=None, dist_measure:str="euclid", openai_token=None, cohere_token=None):
+    def __init__(self, model_checkpoints:List[List[str]], weights:List[float]=None, dist_measure:str="euclid", openai_token:str=None, cohere_token:str=None, device:str=None):
         """
             Args:
                 model_checkpoints (List[str]): a list of model checkpoints and types
@@ -66,6 +66,7 @@ class DistFuse():
                 dist_measure (str): the distance measure (only accept euclidean, cosine, manhattan, by default: euclidean)
                 openai_token (str): openai token
                 cohere_token (str): cohere token
+                device (str): device
         """
         self.model_checkpoints = model_checkpoints
         self.models = []
@@ -81,7 +82,7 @@ class DistFuse():
 
         for i in range(len(self.model_checkpoints)):
             model_checkpoint = self.model_checkpoints[i]
-            model = EmbeddingModel(model_checkpoint[0], type=model_checkpoint[1], openai_token=openai_token, cohere_token=cohere_token)
+            model = EmbeddingModel(model_checkpoint[0], type=model_checkpoint[1], openai_token=openai_token, cohere_token=cohere_token, device=device)
             self.models.append(model)
 
         if weights is not None:
