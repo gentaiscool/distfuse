@@ -1,12 +1,15 @@
 # DistFuse
 
-DistFuse is a library to calculate similarity scores between two collections of text sequences encoded using transformer models. This library allows combining multiple models, including Hugging Face encoder models and embed APIs from Cohere and OpenAI. This is the same implementation of DistFuse from the [MINERS paper](https://arxiv.org/pdf/2406.07424). This library is useful for bitext mining, dense retrieval, retrieval-based classification, and retrieval-augmented generation (RAG).
+DistFuse is a library to calculate similarity scores between two collections of text sequences encoded using transformer models. This library allows combining multiple models, including Hugging Face encoder models and embed APIs from Cohere and OpenAI. 
+
+## Use Cases
+This is the same implementation of DistFuse from the [MINERS paper](https://arxiv.org/pdf/2406.07424). This library is useful for bitext mining, dense retrieval, retrieval-based classification, and retrieval-augmented generation (RAG).
 
 ## Table of Contents
 
 - [Install](#install)
-- [Reference](#reference)
 - [Usage](#usage)
+- [Reference](#reference)
 - [How to Contribute?](#-how-to-contribute)
 
 ## Install
@@ -14,26 +17,11 @@ DistFuse is a library to calculate similarity scores between two collections of 
 pip install distfuse
 ```
 
-## Reference
-If you use any source codes included in this toolkit in your work, please cite the following papers [[1]](https://arxiv.org/pdf/2406.07424) [[2]](https://aclanthology.org/2023.ijcnlp-short.11.pdf).
-```
-@article{winata2024miners,
-  title={MINERS: Multilingual Language Models as Semantic Retrievers},
-  author={Winata, Genta Indra and Zhang, Ruochen and Adelani, David Ifeoluwa},
-  journal={arXiv preprint arXiv:2406.07424},
-  year={2024}
-}
-@inproceedings{winata2023efficient,
-  title={Efficient Zero-Shot Cross-lingual Inference via Retrieval},
-  author={Winata, Genta and Xie, Lingjue and Radhakrishnan, Karthik and Gao, Yifan and Preo{\c{t}}iuc-Pietro, Daniel},
-  booktitle={Proceedings of the 13th International Joint Conference on Natural Language Processing and the 3rd Conference of the Asia-Pacific Chapter of the Association for Computational Linguistics (Volume 2: Short Papers)},
-  pages={93--104},
-  year={2023}
-}
-```
-
 ## Usage
 We support `hf` (Hugging Face models), and APIs, such as `cohere`, and `openai`. For `dist_measure`, we support `cosine`, `euclidean`, and `manhattan`. If you are planning to use API models, please pass the appropriate token to `openai_token` or `cohere_token`. To use more than one model, add the model information to `model_checkpoints` and the weight to `weights`. There is no limit to the number of models you can use.
+
+### Generating Pairwise Scores
+If you want to generate pairwise scores between two lists, you can call `score_pairs`. Here are the examples:
 
 e.g., DistFuse with 2 models.
 ```python
@@ -59,6 +47,24 @@ model = DistFuse(model_checkpoints, weights, dist_measure, openai_token="", cohe
 
 scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
 print(scores)
+```
+
+## Reference
+If you use any source codes included in this toolkit in your work, please cite the following papers [[1]](https://arxiv.org/pdf/2406.07424) [[2]](https://aclanthology.org/2023.ijcnlp-short.11.pdf).
+```
+@article{winata2024miners,
+  title={MINERS: Multilingual Language Models as Semantic Retrievers},
+  author={Winata, Genta Indra and Zhang, Ruochen and Adelani, David Ifeoluwa},
+  journal={arXiv preprint arXiv:2406.07424},
+  year={2024}
+}
+@inproceedings{winata2023efficient,
+  title={Efficient Zero-Shot Cross-lingual Inference via Retrieval},
+  author={Winata, Genta and Xie, Lingjue and Radhakrishnan, Karthik and Gao, Yifan and Preo{\c{t}}iuc-Pietro, Daniel},
+  booktitle={Proceedings of the 13th International Joint Conference on Natural Language Processing and the 3rd Conference of the Asia-Pacific Chapter of the Association for Computational Linguistics (Volume 2: Short Papers)},
+  pages={93--104},
+  year={2023}
+}
 ```
 
 ## 🚀 How to Contribute?
