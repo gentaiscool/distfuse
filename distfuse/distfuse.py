@@ -94,7 +94,7 @@ class DistFuse():
 
     def score_reference(self, predictions:List[str], references:List[List[str]], aggregate="avg") -> List[float]:
         """
-            Compute the scores of two text sequence lists
+            Compute the scores of predictions and references. Each prediction can have a multiple references.
             Args:
                 predictions (List[str]): a list of text sequences (m samples)
                 references (List[List[str]]): a list of list with text sequences (m x r samples) where r is the number of references
