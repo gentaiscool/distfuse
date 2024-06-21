@@ -20,7 +20,7 @@ pip install distfuse
 ## Usage
 We support `hf` (Hugging Face models), and APIs, such as `cohere`, and `openai`. For `dist_measure`, we support `cosine`, `euclidean`, and `manhattan`. If you are planning to use API models, please pass the appropriate token to `openai_token` or `cohere_token`. To use more than one model, add the model information to `model_checkpoints` and the weight to `weights`. There is no limit to the number of models you can use.
 
-### Generating Pairwise Scores
+### Generate Pairwise Scores
 If you want to generate pairwise scores between two lists, you can call `score_pairs`. Here are the examples:
 
 e.g., DistFuse with 2 models.
@@ -46,6 +46,22 @@ dist_measure = "cosine"
 model = DistFuse(model_checkpoints, weights, dist_measure, openai_token="", cohere_token="", device="cuda:0")
 
 scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
+print(scores)
+```
+
+### Generate Predictions to Multi-reference Scores
+If you want to generate pairwise scores between two lists, you can call `score_reference` and pass a list of string as `predictions` with a size of `m` and a list of list of string as `references` with as size of `m` and `r`, where `r` is the length of the references. You can have a variable number of `r` for each sample. The lengths of first dimension the `predictions` and `references` have to be the same. Additionally, we need to pass `aggregate` parameter and it can be `avg` or `max`. Here are the examples:
+
+e.g., DistFuse with 2 models. 
+```python
+from distfuse import DistFuse
+
+model_checkpoints = [["sentence-transformers/LaBSE", "hf"], ["sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"]]
+weights = [1, 1]
+dist_measure = "cosine"
+model = DistFuse(model_checkpoints, weights, dist_measure, openai_token="", cohere_token="", device="cuda:0")
+
+scores = model.score_references(predictions=["I like apple", "I like cats"], references=[["I like orange", "I like dogs"]], aggregate="avg")
 print(scores)
 ```
 
