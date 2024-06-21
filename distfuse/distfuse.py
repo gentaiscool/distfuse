@@ -92,7 +92,40 @@ class DistFuse():
 
         assert len(self.models) == len(self.weights)
 
-    def score_pairs(self, text_list1:List[str], text_list2:List[str]) -> List[float]:
+    def score_reference(self, predictions:List[str], references:List[List[str]], aggregate="avg") -> List[float]:
+        """
+            Compute the scores of two text sequence lists
+            Args:
+                predictions (List[str]): a list of text sequences (m samples)
+                references (List[List[str]]): a list of list with text sequences (m x r samples) where r is the number of references
+                aggregate (str): a mode to aggregate the scores for multi-reference
+            Returns:
+                List[float]: a list of scores (m dimensions)
+        """
+        assert aggregate in ["avg", "max"]
+        assert len(predictions) > 0 and len(references) > 0
+        assert len(predictions) == len(references)
+
+        scores = []
+        for model in self.models:
+            embs1 = model.encode(predictions)
+            embs2 = model.encode(references)
+        
+            for i in range(len(embs1)):
+                reference_scores = self.dist_measure([embs1[i]], [embs2[i]])
+                if aggregate == "avg":
+                    reference_scores = np.mean(np.array(reference_scores), axis=-1)
+                elif aggregate == "max":
+                    reference_scores = np.max(np.array(reference_scores), axis=-1)
+                scores.append(reference_scores)
+
+        final_scores = scores[0]
+        for i in range(1, len(scores)):
+            final_scores = final_scores + scores[i]
+        return final_scores
+
+
+    def score_pair(self, text_list1:List[str], text_list2:List[str]) -> List[float]:
         """
             Compute the scores of two text sequence lists
             Args:
