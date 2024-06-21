@@ -50,7 +50,7 @@ print(scores)
 ```
 
 ### Generate Predictions to Multi-reference Scores
-If you want to generate pairwise scores between two lists, you can call `score_reference` and pass a list of string as `predictions` with a size of `m` and a list of list of string as `references` with as size of `m` and `r`, where `r` is the length of the references. You can have a variable number of `r` for each sample. The lengths of first dimension the `predictions` and `references` have to be the same. Additionally, we need to pass `aggregate` parameter and it can be `avg` or `max`. Here are the examples:
+If you want to generate scores to compare the distance between the predictions and multi-reference, you can call `score_reference` and pass a list of string as `predictions` with a size of `m` and a list of list of string as `references` with as size of `m` and `r`, where `r` is the length of the references. You can have a variable number of `r` for each sample. The lengths of first dimension the `predictions` and `references` have to be the same. Additionally, we need to pass `aggregate` parameter and it can be `avg` or `max`. Here are the examples:
 
 e.g., DistFuse with 2 models. 
 ```python
@@ -61,7 +61,7 @@ weights = [1, 1]
 dist_measure = "cosine"
 model = DistFuse(model_checkpoints, weights, dist_measure, openai_token="", cohere_token="", device="cuda:0")
 
-scores = model.score_references(predictions=["I like apple", "I like cats"], references=[["I like orange", "I like dogs"]], aggregate="avg")
+scores = model.score_reference(predictions=["I like apple", "I like cats"], references=[["I like orange", "I like dogs"]], aggregate="avg")
 print(scores)
 ```
 
