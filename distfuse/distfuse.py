@@ -53,16 +53,17 @@ class DistFuse():
             model_checkpoints = [["sentence-transformers/LaBSE", "hf"], ["sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"]]
             weights = [1, 1]
             dist_measure = "cosine"
-            model = DistFuse(model_checkpoints, weights, dist_measure)
+            model = DistFuse(model_checkpoints, weights, dist_measure=dist_measure)
             
-            scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
+            scores = model.score_pair(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
             print(scores)
     """
-    def __init__(self, model_checkpoints:List[List[str]], weights:List[float]=None, dist_measure:str="euclid", openai_token:str=None, cohere_token:str=None, device:str=None):
+    def __init__(self, model_checkpoints:List[List[str]], weights:List[float]=None, instructions:List[str]=None, dist_measure:str="euclid", openai_token:str=None, cohere_token:str=None, device:str=None):
         """
             Args:
                 model_checkpoints (List[str]): a list of model checkpoints and types
                 weights (List[float]): a list of weights
+                instructions (List[str]): a list of instructions
                 dist_measure (str): the distance measure (only accept euclidean, cosine, manhattan, by default: euclidean)
                 openai_token (str): openai token
                 cohere_token (str): cohere token
@@ -70,13 +71,18 @@ class DistFuse():
         """
         self.model_checkpoints = model_checkpoints
         self.models = []
+        self.instructions = []
+        self.opt = None
 
         if dist_measure == "euclidean":
             self.dist_measure = euclidean_distances
+            self.opt = np.min
         elif dist_measure == "cosine":
             self.dist_measure = cosine_similarity
+            self.opt = np.max
         elif dist_measure == "manhattan":
             self.dist_measure = manhattan_distances
+            self.opt = np.min
         else:
             raise ValueError(f"dist_measure {dist_measure} is not found.")
 
@@ -85,12 +91,62 @@ class DistFuse():
             model = EmbeddingModel(model_checkpoint[0], type=model_checkpoint[1], openai_token=openai_token, cohere_token=cohere_token, device=device)
             self.models.append(model)
 
-        if weights is not None:
+            if instructions is None:
+                self.instructions.append("")
+            else:
+                assert len(instructions) == len(self.model_checkpoints)
+                self.instructions.append(instructions[i])
+
+        if weights is None:
             self.weights = [1] * len(self.models)
         else:
             self.weights = weights
 
         assert len(self.models) == len(self.weights)
+
+    def get_detailed_instruct(self, task_description: str, query: str) -> str:
+        return f'Instruct: {task_description}\nQuery: {query}'
+
+    def score_references(self, predictions:List[str], references:List[List[str]]) -> List[float]:
+        """
+            Compute the scores of predictions and references. Each prediction can have a multiple references.
+            Args:
+                predictions (List[str]): a list of text sequences (m samples)
+                references (List[List[str]]): a list of list with text sequences (m x r samples) where r is the number of references
+            Returns:
+                List[float]: a list of scores (m dimensions)
+        """
+        assert len(predictions) > 0 and len(references) > 0
+        assert len(predictions) == len(references)
+
+        scores = []
+        for model_id, model in zip(range(len(self.models)), self.models):
+            instruction = self.instructions[model_id]
+            if instruction != "":
+                instruction_predictions = []
+                instruction_references = []
+                for prediction, reference in zip(predictions, references):
+                    instruction_predictions.append(self.get_detailed_instruct(instruction, prediction))
+                    instruction_references.append(self.get_detailed_instruct(instruction, reference))
+                embs1 = model.encode(instruction_predictions)
+                embs2 = model.encode(instruction_references)
+            else:
+                embs1 = model.encode(predictions)
+                embs2 = model.encode(references)
+        
+            scores_per_model = []
+            for i in range(len(embs1)):
+                reference_scores = self.dist_measure([embs1[i]], [embs2[i]])
+                reference_scores = self.opt(np.array(reference_scores), axis=-1).tolist()[0]
+                scores_per_model.append(reference_scores)
+            scores.append(scores_per_model)
+
+        final_scores = scores[0]
+        for model_id in range(1, len(scores)):
+            for j in range(len(final_scores)):
+                final_scores[j] += scores[model_id][j] * self.weights[model_id]
+        return final_scores
+
 
     def score_pairs(self, text_list1:List[str], text_list2:List[str]) -> List[float]:
         """
@@ -105,12 +161,23 @@ class DistFuse():
         assert len(text_list1) > 0 and len(text_list2) > 0
 
         scores = []
-        for model in self.models:
-            embs1 = model.encode(text_list1)
-            embs2 = model.encode(text_list2)
+        for model_id, model in zip(range(len(self.models)), self.models):
+            instruction = self.instructions[model_id]
+            if instruction != "":
+                instruction_predictions = []
+                instruction_references = []
+                for prediction, reference in zip(text_list1, text_list2):
+                    instruction_predictions.append(self.get_detailed_instruct(instruction, prediction))
+                    instruction_references.append(self.get_detailed_instruct(instruction, reference))
+                embs1 = model.encode(instruction_predictions)
+                embs2 = model.encode(instruction_references)
+            else:
+                embs1 = model.encode(text_list1)
+                embs2 = model.encode(text_list2)
+
             scores.append(self.dist_measure(embs1, embs2))
 
         final_scores = scores[0]
-        for i in range(1, len(scores)):
-            final_scores = final_scores + scores[i]
+        for model_id in range(1, len(scores)):
+            final_scores = final_scores + scores[model_id] * self.weights[model_id]
         return final_scores
