@@ -53,7 +53,7 @@ class DistFuse():
             model_checkpoints = [["sentence-transformers/LaBSE", "hf"], ["sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"]]
             weights = [1, 1]
             dist_measure = "cosine"
-            model = DistFuse(model_checkpoints, weights, dist_measure)
+            model = DistFuse(model_checkpoints, weights, dist_measure=dist_measure)
             
             scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
             print(scores)

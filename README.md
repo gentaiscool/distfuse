@@ -30,7 +30,7 @@ from distfuse import DistFuse
 model_checkpoints = [["sentence-transformers/LaBSE", "hf"], ["sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"]]
 weights = [1, 1]
 dist_measure = "cosine" # cosine, euclidean, manhattan
-model = DistFuse(model_checkpoints, weights, dist_measure, openai_token="", cohere_token="", device="cuda:0")
+model = DistFuse(model_checkpoints, weights, dist_measure=dist_measure, openai_token="", cohere_token="", device="cuda:0")
 
 scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
 print(scores)
@@ -43,14 +43,27 @@ from distfuse import DistFuse
 model_checkpoints = [["sentence-transformers/LaBSE", "hf"], ["sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"], ["text-embedding-3-large", "openai"]]
 weights = [1, 1, 1]
 dist_measure = "cosine"
-model = DistFuse(model_checkpoints, weights, dist_measure, openai_token="", cohere_token="", device="cuda:0")
+model = DistFuse(model_checkpoints, weights, dist_measure=dist_measure, openai_token="", cohere_token="", device="cuda:0")
 
 scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
 print(scores)
 ```
 
+e.g., DistFuse with 2 models and custom instruction.
+```python
+from distfuse import DistFuse
+
+model_checkpoints = [["sentence-transformers/LaBSE", "hf"], ["intfloat/multilingual-e5-large-instruct", "hf"]]
+weights = [1, 1]
+dist_measure = "cosine" # cosine, euclidean, manhattan
+instructions = ["", "Given a web search query, retrieve relevant passages that answer the query"]
+model = DistFuse(model_checkpoints, weights, instructions, dist_measure=dist_measure, openai_token="", cohere_token="", device="cuda:0")
+
+scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
+print(scores)
+
 ### Generate Predictions to Multi-reference Scores
-If you want to generate scores to compare the distance between the predictions and multi-reference, you can call `score_reference` and pass a list of string as `predictions` with a size of `m` and a list of list of string as `references` with as size of `m` and `r`, where `r` is the length of the references. You can have a variable number of `r` for each sample. The lengths of first dimension the `predictions` and `references` have to be the same. Additionally, we need to pass `aggregate` parameter and it can be `avg` or `max`. Here are the examples:
+If you want to generate scores to compare the distance between the predictions and multi-reference, you can call `score_reference` and pass a list of string as `predictions` with a size of `m` and a list of list of string as `references` with as size of `m` and `r`, where `r` is the length of the references. You can have a variable number of `r` for each sample. The lengths of first dimension the `predictions` and `references` have to be the same. Here are the examples:
 
 e.g., DistFuse with 2 models. 
 ```python
@@ -59,9 +72,9 @@ from distfuse import DistFuse
 model_checkpoints = [["sentence-transformers/LaBSE", "hf"], ["sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "hf"]]
 weights = [1, 1]
 dist_measure = "cosine"
-model = DistFuse(model_checkpoints, weights, dist_measure, openai_token="", cohere_token="", device="cuda:0")
+model = DistFuse(model_checkpoints, weights, dist_measure=dist_measure, openai_token="", cohere_token="", device="cuda:0")
 
-scores = model.score_reference(predictions=["I like apple", "I like cats"], references=[["I like orange", "I like dogs"]], aggregate="avg")
+scores = model.score_reference(predictions=["I like apple", "I like cats"], references=[["I like orange", "I like dogs"]])
 print(scores)
 ```
 
