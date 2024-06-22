@@ -133,8 +133,7 @@ class DistFuse():
             scores_per_model = []
             for i in range(len(embs1)):
                 reference_scores = self.dist_measure([embs1[i]], [embs2[i]])
-                print(reference_scores, len(embs1), len(embs2))
-                reference_scores = np.max(np.array(reference_scores), axis=-1)
+                reference_scores = np.max(np.array(reference_scores), axis=-1).tolist()
                 scores_per_model.append(reference_scores)
             scores.append(scores_per_model)
 
