@@ -12,9 +12,15 @@ This is the same implementation of DistFuse from the [MINERS paper](https://arxi
 - [Reference](#reference)
 - [How to Contribute?](#-how-to-contribute)
 
-## Install
+## Install from pypi (stable)
 ```
 pip install distfuse
+```
+
+## Install from source (latest)
+```
+git clone --recursive https://github.com/gentaiscool/distfuse
+pip install .
 ```
 
 ## Usage
