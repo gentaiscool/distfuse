@@ -139,8 +139,8 @@ class DistFuse():
 
         final_scores = scores[0]
         for i in range(1, len(scores)):
-            print(scores[i])
-            final_scores = final_scores + scores[i]
+            for j in range(len(final_scores)):
+                final_scores[j] = scores[i][j]
         return final_scores
 
 
@@ -174,6 +174,8 @@ class DistFuse():
             scores.append(self.dist_measure(embs1, embs2))
 
         final_scores = scores[0]
+        print(final_scores)
         for i in range(1, len(scores)):
             final_scores = final_scores + scores[i]
+            print(final_scores, scores[i])
         return final_scores
