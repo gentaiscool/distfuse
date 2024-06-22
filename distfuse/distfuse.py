@@ -143,9 +143,9 @@ class DistFuse():
 
         print(scores)
         final_scores = scores[0]
-        for i in range(1, len(scores)):
+        for model_id in range(1, len(scores)):
             for j in range(len(final_scores)):
-                final_scores[j] = scores[i][j]
+                final_scores[j] += scores[model_id][j] * self.weights[model_id]
         return final_scores
 
 
@@ -180,7 +180,7 @@ class DistFuse():
 
         final_scores = scores[0]
         print(final_scores)
-        for i in range(1, len(scores)):
-            final_scores = final_scores + scores[i]
-            print(final_scores, scores[i])
+        for model_id in range(1, len(scores)):
+            final_scores = final_scores + scores[model_id] * self.weights[model_id]
+            print(final_scores, scores[model_id])
         return final_scores
