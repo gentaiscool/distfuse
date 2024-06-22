@@ -72,13 +72,17 @@ class DistFuse():
         self.model_checkpoints = model_checkpoints
         self.models = []
         self.instructions = []
+        self.opt = None
 
         if dist_measure == "euclidean":
             self.dist_measure = euclidean_distances
+            self.opt = np.min
         elif dist_measure == "cosine":
             self.dist_measure = cosine_similarity
+            self.opt = np.max
         elif dist_measure == "manhattan":
             self.dist_measure = manhattan_distances
+            self.opt = np.min
         else:
             raise ValueError(f"dist_measure {dist_measure} is not found.")
 
@@ -133,10 +137,11 @@ class DistFuse():
             scores_per_model = []
             for i in range(len(embs1)):
                 reference_scores = self.dist_measure([embs1[i]], [embs2[i]])
-                reference_scores = np.max(np.array(reference_scores), axis=-1).tolist()[0]
+                reference_scores = self.opt(np.array(reference_scores), axis=-1).tolist()[0]
                 scores_per_model.append(reference_scores)
             scores.append(scores_per_model)
 
+        print(scores)
         final_scores = scores[0]
         for i in range(1, len(scores)):
             for j in range(len(final_scores)):
