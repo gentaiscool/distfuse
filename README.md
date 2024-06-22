@@ -80,7 +80,7 @@ weights = [1, 1]
 dist_measure = "cosine"
 model = DistFuse(model_checkpoints, weights, dist_measure=dist_measure, openai_token="", cohere_token="", device="cuda:0")
 
-scores = model.score_reference(predictions=["I like apple", "I like cats"], references=[["I like orange", "I like dogs"]])
+scores = model.score_references(predictions=["I like apple", "I like cats"], references=[["I like orange", "I like dogs"]])
 print(scores)
 ```
 

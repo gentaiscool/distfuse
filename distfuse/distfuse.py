@@ -55,7 +55,7 @@ class DistFuse():
             dist_measure = "cosine"
             model = DistFuse(model_checkpoints, weights, dist_measure=dist_measure)
             
-            scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
+            scores = model.score_pair(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
             print(scores)
     """
     def __init__(self, model_checkpoints:List[List[str]], weights:List[float]=None, instructions:List[str]=None, dist_measure:str="euclid", openai_token:str=None, cohere_token:str=None, device:str=None):
@@ -103,7 +103,7 @@ class DistFuse():
     def get_detailed_instruct(task_description: str, query: str) -> str:
         return f'Instruct: {task_description}\nQuery: {query}'
 
-    def score_reference(self, predictions:List[str], references:List[List[str]]) -> List[float]:
+    def score_references(self, predictions:List[str], references:List[List[str]]) -> List[float]:
         """
             Compute the scores of predictions and references. Each prediction can have a multiple references.
             Args:
@@ -141,7 +141,7 @@ class DistFuse():
         return final_scores
 
 
-    def score_pair(self, text_list1:List[str], text_list2:List[str]) -> List[float]:
+    def score_pairs(self, text_list1:List[str], text_list2:List[str]) -> List[float]:
         """
             Compute the scores of two text sequence lists
             Args:
