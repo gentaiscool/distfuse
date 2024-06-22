@@ -117,7 +117,7 @@ class DistFuse():
 
         scores = []
         for model_id, model in zip(range(len(self.models)), self.models):
-            instruction = self.instructions(model_id)
+            instruction = self.instructions[model_id]
             if instruction != "":
                 instruction_predictions = []
                 instruction_references = []
@@ -155,7 +155,7 @@ class DistFuse():
 
         scores = []
         for model_id, model in zip(range(len(self.models)), self.models):
-            instruction = self.instructions(model_id)
+            instruction = self.instructions[model_id]
             if instruction != "":
                 instruction_predictions = []
                 instruction_references = []
