@@ -104,7 +104,7 @@ class DistFuse():
 
         assert len(self.models) == len(self.weights)
 
-    def get_detailed_instruct(task_description: str, query: str) -> str:
+    def get_detailed_instruct(self, task_description: str, query: str) -> str:
         return f'Instruct: {task_description}\nQuery: {query}'
 
     def score_references(self, predictions:List[str], references:List[List[str]]) -> List[float]:
