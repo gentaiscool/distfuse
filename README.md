@@ -67,6 +67,7 @@ model = DistFuse(model_checkpoints, weights, instructions, dist_measure=dist_mea
 
 scores = model.score_pairs(["I like apple", "I like cats"], ["I like orange", "I like dogs"])
 print(scores)
+```
 
 ### Generate Predictions to Multi-reference Scores
 If you want to generate scores to compare the distance between the predictions and multi-reference, you can call `score_reference` and pass a list of string as `predictions` with a size of `m` and a list of list of string as `references` with as size of `m` and `r`, where `r` is the length of the references. You can have a variable number of `r` for each sample. The lengths of first dimension the `predictions` and `references` have to be the same. Here are the examples:
