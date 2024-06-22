@@ -137,6 +137,7 @@ class DistFuse():
                 scores_per_model.append(reference_scores)
             scores.append(scores_per_model)
 
+        print(scores)
         final_scores = scores[0]
         for i in range(1, len(scores)):
             final_scores = final_scores + scores[i]
