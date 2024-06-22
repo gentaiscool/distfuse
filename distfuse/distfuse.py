@@ -97,7 +97,7 @@ class DistFuse():
                 assert len(instructions) == len(self.model_checkpoints)
                 self.instructions.append(instructions[i])
 
-        if weights is not None:
+        if weights is None:
             self.weights = [1] * len(self.models)
         else:
             self.weights = weights
